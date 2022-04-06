@@ -149,7 +149,7 @@ class AlienInvasion:
         """This method for countering dead aliens by user"""
         self.stats.dead_aliens += 1
         print(f"You have killed {self.stats.dead_aliens} aliens!")
-        if self.stats.dead_aliens >= 50:
+        if self.stats.dead_aliens >= 15:
             self.stats.game_active = False
 
     def _ship_hit(self):
@@ -162,7 +162,6 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.stats.game_active = False
-
 
 if __name__ == "__main__":
     # Creating the game object and run the game
