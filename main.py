@@ -10,7 +10,6 @@ from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
 
-
 # from character import Character
 
 class AlienInvasion:

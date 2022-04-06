@@ -30,6 +30,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Z.000\Desktop\task12_6" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.main">
     <configuration name="alien" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="task12_6" />
