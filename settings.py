@@ -27,3 +27,4 @@ class Settings:
         self.changer_direction = 1
         self.aim_up_speed = 1
         self.aimed_patrons = 0
+        self.lost_patrons = 0

@@ -9,6 +9,7 @@ from ship import Ship
 from bullet import Bullet
 from game_stats import GameStats
 from rectangle import Rectangle
+from button import Button
 
 class AlienInvasion:
     """Class for game initialization"""
@@ -18,13 +19,15 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+        self.screen_rect = self.screen.get_rect()
 
-        pygame.display.set_caption("The russian ork's killing")
+        pygame.display.set_caption("The aim shooting")
 
         self.stats = GameStats(self)
         self.ship = Ship(self)
         self.aim = Rectangle(self)
         self.bullets = pygame.sprite.Group()
+        self.play_button = Button(self, 'Play')
 
     def run_game(self):
         """The main cycle of the game"""
@@ -46,6 +49,18 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+
+    def _check_play_button(self, mouse_pos):
+        """Start the game when a user clicked the play button"""
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.stats.game_active:
+            self.stats.reset_stats()
+            self.stats.game_active = True
+            self.bullets.empty()
+            pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
         """Reaction on pressing buttons"""
@@ -91,6 +106,8 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aim.draw_aim()
+        if not self.stats.game_active:
+            self.play_button.draw_button()
 
         # Show the last painted screen
         pygame.display.flip()
@@ -113,9 +130,23 @@ class AlienInvasion:
             self.bullets.empty()
             self.settings.aimed_patrons += 1
             print(self.settings.aimed_patrons)
-            if self.settings.aimed_patrons >= 10:
+            if self.settings.aimed_patrons >= 5:
                 self.stats.game_active = False
                 print("You have won!")
+                pygame.mouse.set_visible(True)
+        else:
+            self._lost_patron_counter()
+
+    def _lost_patron_counter(self):
+        """The method is a counter of all lost patrons during the game"""
+        for bullet in self.bullets.sprites():
+            if bullet.rect.left >= self.screen_rect.right:
+                self.settings.lost_patrons += 1
+                print(self.settings.lost_patrons)
+        if self.settings.lost_patrons >= 3:
+            self.stats.game_active = False
+            pygame.mouse.set_visible(True)
+            print("Game is over")
 
     def _ship_hit(self):
         """This method regulates game's behavior when the fleet touched the ship"""
