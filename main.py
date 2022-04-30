@@ -146,7 +146,7 @@ class AlienInvasion:
         if self.settings.lost_patrons >= 3:
             self.stats.game_active = False
             pygame.mouse.set_visible(True)
-            print("Game is over")
+            print("Game is over. You have lost")
 
     def _ship_hit(self):
         """This method regulates game's behavior when the fleet touched the ship"""
