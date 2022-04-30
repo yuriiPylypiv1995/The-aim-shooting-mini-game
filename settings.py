@@ -18,6 +18,11 @@ class Settings:
         self.bullet_color = (60, 60, 60)
         self.bullets_allowed = 10
 
-        # Aliens settings
-        self.alien_speed = 1.0
-        self.alien_additional_x = 1300
+        # Aims settings
+        self.aim_width = 230
+        self.aim_height = 200
+        self.aim_background = (255, 0, 0)
+        self.aim_speed_y = 0.5
+        self.changer_direction = 1
+        self.aim_up_speed = 1
+        self.aimed_patrons = 0

@@ -1,4 +1,4 @@
-# tasks 12_6, 13_5, 13_6
+# tasks 14_2
 
 import sys
 import pygame
@@ -7,10 +7,8 @@ from time import sleep
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
-from alien import Alien
 from game_stats import GameStats
-
-# from character import Character
+from rectangle import Rectangle
 
 class AlienInvasion:
     """Class for game initialization"""
@@ -21,15 +19,12 @@ class AlienInvasion:
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
 
-        pygame.display.set_caption("Alien Invasion")
+        pygame.display.set_caption("The russian ork's killing")
 
         self.stats = GameStats(self)
         self.ship = Ship(self)
+        self.aim = Rectangle(self)
         self.bullets = pygame.sprite.Group()
-        self.aliens = pygame.sprite.Group()
-        # self.character = Character(self)
-
-        self._create_fleet()
 
     def run_game(self):
         """The main cycle of the game"""
@@ -38,7 +33,8 @@ class AlienInvasion:
             if self.stats.game_active:
                 self.ship.update_position()
                 self._update_bullets()
-                self._update_aliens()
+                self._check_aim_edges()
+                self.aim.update()
             self._update_screen()
 
     def _check_events(self):
@@ -94,8 +90,7 @@ class AlienInvasion:
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-        # self.character.blit_zombie()
-        self.aliens.draw(self.screen)
+        self.aim.draw_aim()
 
         # Show the last painted screen
         pygame.display.flip()
@@ -112,55 +107,34 @@ class AlienInvasion:
         self.bullets.update()
         # Removing bullets that out of the screen
         for bullet in self.bullets.copy():
-            if bullet.rect.left > self.ship.screen_rect.right:
+            if bullet  .rect.left > self.ship.screen_rect.right:
                 self.bullets.remove(bullet)
-
-        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
-        if collisions:
-            self._dead_aliens_counter()
-
-    def _create_fleet(self):
-        """This is the method for alien creation"""
-        alien = Alien(self)
-        alien_width, alien_height = alien.rect.size
-
-        available_space_x = self.settings.screen_width
-        number_aliens = available_space_x // (2 * alien_width)
-
-        available_space_y = self.settings.screen_height
-        number_rows = available_space_y // (2 * alien_height)
-
-        for row_number in range(number_rows):
-            for alien_number in range(number_aliens):
-                alien = Alien(self)
-                alien.rect.x = self.settings.alien_additional_x + (alien_width + 2 * alien_width * alien_number)
-                alien.rect.y = alien_height + 2 * alien_height * row_number
-                self.aliens.add(alien)
-
-    def _update_aliens(self):
-        """The method for fleet moving"""
-        self.aliens.update()
-
-        if pygame.sprite.spritecollideany(self.ship, self.aliens):
-            self._ship_hit()
-
-    def _dead_aliens_counter(self):
-        """This method for countering dead aliens by user"""
-        self.stats.dead_aliens += 1
-        print(f"You have killed {self.stats.dead_aliens} aliens!")
-        if self.stats.dead_aliens >= 15:
-            self.stats.game_active = False
+        if pygame.sprite.spritecollideany(self.aim, self.bullets):
+            self.bullets.empty()
+            self.settings.aimed_patrons += 1
+            print(self.settings.aimed_patrons)
+            if self.settings.aimed_patrons >= 10:
+                self.stats.game_active = False
+                print("You have won!")
 
     def _ship_hit(self):
         """This method regulates game's behavior when the fleet touched the ship"""
         if self.stats.ships_left > 0:
             self.stats.ships_left -= 1
-            self.aliens.empty()
             self.bullets.empty()
-            self._create_fleet()
             sleep(0.5)
         else:
             self.stats.game_active = False
+
+    def _check_aim_edges(self):
+        """Check if the aim reached the buttom of the screen"""
+        if self.aim.check_edges():
+            self._change_aim_direction()
+
+    def _change_aim_direction(self):
+        """Change the aim direction to up"""
+        self.aim.y -= self.settings.aim_up_speed
+        self.settings.changer_direction *= -1
 
 if __name__ == "__main__":
     # Creating the game object and run the game
