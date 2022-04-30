@@ -27,7 +27,7 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.aim = Rectangle(self)
         self.bullets = pygame.sprite.Group()
-        self.play_button = Button(self, 'Play')
+        self.play_button = Button(self, 'Start')
 
     def run_game(self):
         """The main cycle of the game"""
