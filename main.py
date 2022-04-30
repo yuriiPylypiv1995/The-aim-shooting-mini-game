@@ -107,7 +107,7 @@ class AlienInvasion:
         self.bullets.update()
         # Removing bullets that out of the screen
         for bullet in self.bullets.copy():
-            if bullet  .rect.left > self.ship.screen_rect.right:
+            if bullet.rect.left > self.ship.screen_rect.right:
                 self.bullets.remove(bullet)
         if pygame.sprite.spritecollideany(self.aim, self.bullets):
             self.bullets.empty()

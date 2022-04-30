@@ -5,7 +5,6 @@ class Rectangle:
 
     def __init__(self, o_k_game):
         """Aim's settings"""
-
         self.screen = o_k_game.screen
         self.screen_rect = self.screen.get_rect()
         self.settings = o_k_game.settings
