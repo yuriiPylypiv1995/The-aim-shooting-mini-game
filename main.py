@@ -38,6 +38,7 @@ class AlienInvasion:
                 self._update_bullets()
                 self._check_aim_edges()
                 self.aim.update()
+                self.settings.speed_increser()
             self._update_screen()
 
     def _check_events(self):
@@ -130,10 +131,11 @@ class AlienInvasion:
             self.bullets.empty()
             self.settings.aimed_patrons += 1
             print(self.settings.aimed_patrons)
-            if self.settings.aimed_patrons >= 5:
+            if self.settings.aimed_patrons >= 30:
                 self.stats.game_active = False
                 print("You have won!")
                 pygame.mouse.set_visible(True)
+                self.settings.default_speed_settings()
         else:
             self._lost_patron_counter()
 
@@ -143,10 +145,11 @@ class AlienInvasion:
             if bullet.rect.left >= self.screen_rect.right:
                 self.settings.lost_patrons += 1
                 print(self.settings.lost_patrons)
-        if self.settings.lost_patrons >= 3:
+        if self.settings.lost_patrons >= 10:
             self.stats.game_active = False
             pygame.mouse.set_visible(True)
             print("Game is over. You have lost")
+            self.settings.default_speed_settings()
 
     def _ship_hit(self):
         """This method regulates game's behavior when the fleet touched the ship"""

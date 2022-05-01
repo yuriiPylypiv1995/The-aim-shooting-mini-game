@@ -9,9 +9,10 @@ class Rectangle:
         self.screen_rect = self.screen.get_rect()
         self.settings = o_k_game.settings
         self.rect = pygame.Rect(0, 0, self.settings.aim_width, self.settings.aim_height)
+        self.rect.x = 900
+        self.rect.y = 10
         self.y = float(self.rect.y)
         self.x = float(self.rect.x)
-        self.rect.topleft = self.screen_rect.midtop
 
     def update(self):
         """The method for aim's positin updating (moving)"""
