@@ -15,7 +15,7 @@ class Rectangle:
         self.x = float(self.rect.x)
 
     def update(self):
-        """The method for aim's positin updating (moving)"""
+        """The method for aim's position updating (moving)"""
         self.y += (self.settings.aim_speed_y * self.settings.changer_direction)
         self.rect.y = self.y
 
